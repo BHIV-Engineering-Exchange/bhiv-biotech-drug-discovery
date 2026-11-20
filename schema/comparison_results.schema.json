@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TBComparisonResults",
+  "description": "Schema for TB drug discovery comparison ranking output",
+  "type": "object",
+  "required": [
+    "method_version",
+    "maximum_score",
+    "scoring_dimensions",
+    "results"
+  ],
+  "properties": {
+    "method_version": { "type": "string" },
+    "maximum_score": { "type": "integer" },
+    "scoring_dimensions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["candidate_id", "compound_name", "score"],
+        "properties": {
+          "rank": { "type": ["integer", "null"] },
+          "candidate_id": { "type": "string" },
+          "compound_name": { "type": "string" },
+          "score": {
+            "type": "object",
+            "required": ["score_inputs", "total", "maximum", "method_version", "missing_inputs", "score_status"],
+            "properties": {
+              "score_inputs": { "type": "object" },
+              "total": { "type": ["integer", "null"] },
+              "maximum": { "type": "integer" },
+              "method_version": { "type": "string" },
+              "missing_inputs": { "type": "array", "items": { "type": "string" } },
+              "score_status": { "type": "string", "enum": ["COMPLETE", "INCOMPLETE"] }
+            }
+          }
+        }
+      }
+    }
+  }
+}

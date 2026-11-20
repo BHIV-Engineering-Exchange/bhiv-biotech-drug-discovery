@@ -1,6 +1,8 @@
 import csv
+import os
 
-CSV_FILE = "candidate_compounds.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_FILE = os.path.join(BASE_DIR, "candidate_compounds.csv")
 
 EVIDENCE_FIELDS = [
     "source_database",
@@ -17,6 +19,7 @@ EVIDENCE_FIELDS = [
 
 
 def is_complete(value):
+    """Check if an evidence field contains substantive value."""
     if not value:
         return False
 
@@ -33,26 +36,50 @@ def is_complete(value):
     return True
 
 
-with open(CSV_FILE, newline="", encoding="utf-8-sig") as file:
-    candidates = list(csv.DictReader(file))
+def calculate_candidate_completeness(candidate, fields=None):
+    """Calculate completeness metrics for a single candidate."""
+    if fields is None:
+        fields = EVIDENCE_FIELDS
+
+    completed = sum(1 for field in fields if is_complete(candidate.get(field, "")))
+    total = len(fields)
+    percentage = (completed / total) * 100 if total > 0 else 0.0
+
+    return {
+        "candidate_id": candidate.get("candidate_id", ""),
+        "compound_name": candidate.get("compound_name", ""),
+        "completed_fields": completed,
+        "total_fields": total,
+        "completeness_percentage": percentage
+    }
 
 
-print("\nTB Candidate Evidence Completeness")
-print("=" * 50)
+def calculate_all_completeness(csv_file=None):
+    """Calculate completeness for all candidates in the CSV file."""
+    if csv_file is None:
+        csv_file = CSV_FILE
 
-for candidate in candidates:
+    with open(csv_file, newline="", encoding="utf-8-sig") as file:
+        candidates = list(csv.DictReader(file))
 
-    completed = 0
+    return [calculate_candidate_completeness(c) for c in candidates]
 
-    for field in EVIDENCE_FIELDS:
-        if is_complete(candidate[field]):
-            completed += 1
 
-    total = len(EVIDENCE_FIELDS)
-    percentage = (completed / total) * 100
+def main():
+    """Print completeness summary for TB candidates."""
+    results = calculate_all_completeness()
 
-    print(
-        f"{candidate['candidate_id']} - "
-        f"{candidate['compound_name']}: "
-        f"{completed}/{total} fields = {percentage:.0f}%"
-    )
+    print("\nTB Candidate Evidence Completeness")
+    print("=" * 50)
+
+    for item in results:
+        print(
+            f"{item['candidate_id']} - "
+            f"{item['compound_name']}: "
+            f"{item['completed_fields']}/{item['total_fields']} fields = "
+            f"{item['completeness_percentage']:.0f}%"
+        )
+
+
+if __name__ == "__main__":
+    main()

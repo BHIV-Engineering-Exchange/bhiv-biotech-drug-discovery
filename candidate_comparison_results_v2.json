@@ -1,0 +1,236 @@
+{
+  "method_version": "1.0.0",
+  "maximum_score": 40,
+  "scoring_dimensions": [
+    "target_relevance",
+    "mechanism_evidence",
+    "potency_evidence",
+    "selectivity_evidence",
+    "adme_evidence",
+    "safety_evidence",
+    "research_development_evidence",
+    "evidence_completeness"
+  ],
+  "results": [
+    {
+      "candidate_id": "C-002",
+      "compound_name": "Isoniazid",
+      "score": {
+        "score_inputs": {
+          "target_relevance": 5,
+          "mechanism_evidence": 5,
+          "potency_evidence": 4,
+          "selectivity_evidence": 2,
+          "adme_evidence": 5,
+          "safety_evidence": 3,
+          "research_development_evidence": 5,
+          "evidence_completeness": 5
+        },
+        "total": 34,
+        "maximum": 40,
+        "method_version": "1.0.0",
+        "missing_inputs": [],
+        "score_status": "COMPLETE"
+      },
+      "rank": 1
+    },
+    {
+      "candidate_id": "C-005",
+      "compound_name": "Bedaquiline",
+      "score": {
+        "score_inputs": {
+          "target_relevance": 5,
+          "mechanism_evidence": 5,
+          "potency_evidence": 3,
+          "selectivity_evidence": 2,
+          "adme_evidence": 5,
+          "safety_evidence": 3,
+          "research_development_evidence": 5,
+          "evidence_completeness": 4
+        },
+        "total": 32,
+        "maximum": 40,
+        "method_version": "1.0.0",
+        "missing_inputs": [],
+        "score_status": "COMPLETE"
+      },
+      "rank": 2
+    },
+    {
+      "candidate_id": "C-001",
+      "compound_name": "Rifampicin",
+      "score": {
+        "score_inputs": {
+          "target_relevance": 5,
+          "mechanism_evidence": 5,
+          "potency_evidence": 1,
+          "selectivity_evidence": 1,
+          "adme_evidence": 5,
+          "safety_evidence": 4,
+          "research_development_evidence": 5,
+          "evidence_completeness": 4
+        },
+        "total": 30,
+        "maximum": 40,
+        "method_version": "1.0.0",
+        "missing_inputs": [],
+        "score_status": "COMPLETE"
+      },
+      "rank": 3
+    },
+    {
+      "candidate_id": "C-008",
+      "compound_name": "Linezolid",
+      "score": {
+        "score_inputs": {
+          "target_relevance": 4,
+          "mechanism_evidence": 5,
+          "potency_evidence": 2,
+          "selectivity_evidence": 2,
+          "adme_evidence": 5,
+          "safety_evidence": 3,
+          "research_development_evidence": 5,
+          "evidence_completeness": 4
+        },
+        "total": 30,
+        "maximum": 40,
+        "method_version": "1.0.0",
+        "missing_inputs": [],
+        "score_status": "COMPLETE"
+      },
+      "rank": 4
+    },
+    {
+      "candidate_id": "C-004",
+      "compound_name": "Ethambutol",
+      "score": {
+        "score_inputs": {
+          "target_relevance": 5,
+          "mechanism_evidence": 5,
+          "potency_evidence": 1,
+          "selectivity_evidence": 1,
+          "adme_evidence": 5,
+          "safety_evidence": 3,
+          "research_development_evidence": 5,
+          "evidence_completeness": 4
+        },
+        "total": 29,
+        "maximum": 40,
+        "method_version": "1.0.0",
+        "missing_inputs": [],
+        "score_status": "COMPLETE"
+      },
+      "rank": 5
+    },
+    {
+      "candidate_id": "C-006",
+      "compound_name": "Delamanid",
+      "score": {
+        "score_inputs": {
+          "target_relevance": 5,
+          "mechanism_evidence": 4,
+          "potency_evidence": 2,
+          "selectivity_evidence": 2,
+          "adme_evidence": 4,
+          "safety_evidence": 3,
+          "research_development_evidence": 5,
+          "evidence_completeness": 4
+        },
+        "total": 29,
+        "maximum": 40,
+        "method_version": "1.0.0",
+        "missing_inputs": [],
+        "score_status": "COMPLETE"
+      },
+      "rank": 6
+    },
+    {
+      "candidate_id": "C-007",
+      "compound_name": "Pretomanid",
+      "score": {
+        "score_inputs": {
+          "target_relevance": 5,
+          "mechanism_evidence": 4,
+          "potency_evidence": 2,
+          "selectivity_evidence": 2,
+          "adme_evidence": 4,
+          "safety_evidence": 3,
+          "research_development_evidence": 5,
+          "evidence_completeness": 4
+        },
+        "total": 29,
+        "maximum": 40,
+        "method_version": "1.0.0",
+        "missing_inputs": [],
+        "score_status": "COMPLETE"
+      },
+      "rank": 7
+    },
+    {
+      "candidate_id": "C-003",
+      "compound_name": "Pyrazinamide",
+      "score": {
+        "score_inputs": {
+          "target_relevance": 5,
+          "mechanism_evidence": 4,
+          "potency_evidence": 1,
+          "selectivity_evidence": 1,
+          "adme_evidence": 5,
+          "safety_evidence": 3,
+          "research_development_evidence": 5,
+          "evidence_completeness": 4
+        },
+        "total": 28,
+        "maximum": 40,
+        "method_version": "1.0.0",
+        "missing_inputs": [],
+        "score_status": "COMPLETE"
+      },
+      "rank": 8
+    },
+    {
+      "candidate_id": "C-009",
+      "compound_name": "Clofazimine",
+      "score": {
+        "score_inputs": {
+          "target_relevance": 4,
+          "mechanism_evidence": 3,
+          "potency_evidence": 2,
+          "selectivity_evidence": 2,
+          "adme_evidence": 3,
+          "safety_evidence": 2,
+          "research_development_evidence": 5,
+          "evidence_completeness": 4
+        },
+        "total": 25,
+        "maximum": 40,
+        "method_version": "1.0.0",
+        "missing_inputs": [],
+        "score_status": "COMPLETE"
+      },
+      "rank": 9
+    },
+    {
+      "candidate_id": "C-010",
+      "compound_name": "Sutezolid",
+      "score": {
+        "score_inputs": {
+          "target_relevance": 4,
+          "mechanism_evidence": 4,
+          "potency_evidence": 2,
+          "selectivity_evidence": 2,
+          "adme_evidence": 3,
+          "safety_evidence": 2,
+          "research_development_evidence": 3,
+          "evidence_completeness": 4
+        },
+        "total": 24,
+        "maximum": 40,
+        "method_version": "1.0.0",
+        "missing_inputs": [],
+        "score_status": "COMPLETE"
+      },
+      "rank": 10
+    }
+  ]
+}

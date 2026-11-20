@@ -1,7 +1,9 @@
 import csv
+import os
 
-CSV_FILE = "../candidate_compounds.csv"
-OUTPUT_FILE = "candidate_comparison_results.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_FILE = os.path.join(BASE_DIR, "candidate_compounds.csv")
+OUTPUT_FILE = os.path.join(BASE_DIR, "candidate_comparison_results.csv")
 
 CRITERIA = [
     "Target relevance",
@@ -27,61 +29,83 @@ SCORES = {
     "C-010": [4, 4, 2, 2, 3, 2, 3, 4]
 }
 
-with open(CSV_FILE, newline="", encoding="utf-8-sig") as file:
-    candidates = list(csv.DictReader(file))
 
-results = []
+def generate_comparison_data(csv_file=None):
+    """Generate ranked comparison list from CSV candidate data and SCORES."""
+    if csv_file is None:
+        csv_file = CSV_FILE
 
-for candidate in candidates:
-    candidate_id = candidate["candidate_id"]
+    with open(csv_file, newline="", encoding="utf-8-sig") as file:
+        candidates = list(csv.DictReader(file))
 
-    if candidate_id not in SCORES:
-        continue
+    results = []
 
-    scores = SCORES[candidate_id]
+    for candidate in candidates:
+        candidate_id = candidate["candidate_id"]
 
-    row = {
-        "candidate_id": candidate_id,
-        "compound_name": candidate["compound_name"],
-    }
+        if candidate_id not in SCORES:
+            continue
 
-    for criterion, score in zip(CRITERIA, scores):
-        row[criterion] = score
+        scores = SCORES[candidate_id]
 
-    row["total_score"] = sum(scores)
+        row = {
+            "candidate_id": candidate_id,
+            "compound_name": candidate["compound_name"],
+        }
 
-    results.append(row)
+        for criterion, score in zip(CRITERIA, scores):
+            row[criterion] = score
 
-# Sort by highest score first
-# Candidate ID is used as a tie-breaker.
-results.sort(
-    key=lambda x: (-x["total_score"], x["candidate_id"])
-)
+        row["total_score"] = sum(scores)
+        results.append(row)
 
-fieldnames = [
-    "rank",
-    "candidate_id",
-    "compound_name"
-] + CRITERIA + ["total_score"]
-
-with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as file:
-    writer = csv.DictWriter(file, fieldnames=fieldnames)
-    writer.writeheader()
+    # Sort by highest score first, using Candidate ID as tie-breaker
+    results.sort(key=lambda x: (-x["total_score"], x["candidate_id"]))
 
     for rank, row in enumerate(results, start=1):
-        output_row = {"rank": rank}
-        output_row.update(row)
-        writer.writerow(output_row)
+        row["rank"] = rank
 
-print("\nFinal TB Candidate Ranking")
-print("=" * 55)
+    return results
 
-for rank, row in enumerate(results, start=1):
-    print(
-        f"{rank}. {row['candidate_id']} - "
-        f"{row['compound_name']}: "
-        f"{row['total_score']}/40"
-    )
 
-print("\nComparison file created successfully:")
-print(OUTPUT_FILE)
+def save_comparison_csv(results, output_file=None):
+    """Write comparison results into a CSV file."""
+    if output_file is None:
+        output_file = OUTPUT_FILE
+
+    fieldnames = [
+        "rank",
+        "candidate_id",
+        "compound_name"
+    ] + CRITERIA + ["total_score"]
+
+    with open(output_file, "w", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in results:
+            writer.writerow(row)
+
+    return output_file
+
+
+def main():
+    """Execute candidate comparison and save ranked results."""
+    results = generate_comparison_data()
+    saved_path = save_comparison_csv(results)
+
+    print("\nFinal TB Candidate Ranking")
+    print("=" * 55)
+
+    for row in results:
+        print(
+            f"{row['rank']}. {row['candidate_id']} - "
+            f"{row['compound_name']}: "
+            f"{row['total_score']}/40"
+        )
+
+    print("\nComparison file created successfully:")
+    print(saved_path)
+
+
+if __name__ == "__main__":
+    main()

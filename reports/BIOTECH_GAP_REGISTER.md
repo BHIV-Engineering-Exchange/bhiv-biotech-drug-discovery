@@ -2,262 +2,211 @@
 
 **Project:** TB Drug Discovery Research and Candidate Intelligence Pipeline  
 **Repository:** `bhiv-biotech-drug-discovery`  
-**Owner:** Project audit / issue prioritisation  
-**Last reviewed:** 14 November 2026 (Updated with Direct Repository Verification)
+**Last updated:** 20 November 2026  
+**Previous review:** 14 November 2026
 
 ---
 
-## 1. Prioritisation Summary
+## 1. Status Summary
 
-This register ranks the known gaps by their impact on delivery. All gaps have now been directly investigated and verified in the live repository.
+All technical blockers across scoring, paths, provenance, modularity, integration contracts, and automated testing have been **resolved** as of 20 November 2026. The automated test suite passes 18/18 tests.
 
-| Priority | Gap | Delivery impact | Live Verification Status |
+| Priority | Gap | Previous Status | Current Status |
 |---|---|---|---|
-| P1 | Scoring scripts cannot resolve input files (GAP-01) | Scoring fails on fresh checkout: `calculate_scores.py` and `generate_comparison.py` raise `FileNotFoundError`. | **Root cause confirmed:** Hardcoded `"../candidate_compounds.csv"`. |
-| P1 | Provenance JSON generation and file naming (GAP-02) | `calculate_scores_v2.py` and `candidate_provenance.py` fail to load input data. | **Root cause confirmed:** Files exist on disk as `candidate_records_v1[1].json` and `candidate_records_with_provenance[1].json`. |
-| P1 | Candidate dataset is limited to 10 entries (GAP-03) | Research coverage is narrow; lacks automated external DB ingestion. | **Confirmed in repository:** Exact count is 10 candidates in CSV. |
-| P2 | Potency and selectivity evidence incomplete (GAP-04) | 8/10 candidates report `UNKNOWN / NOT FOUND` for potency/selectivity. | **Confirmed in repository:** High evidence gap in pharmacological data. |
-| P2 | ADME, human PK, and safety extraction need depth (GAP-05) | Quantitative exposure and safety profiles are uneven across candidates. | **Confirmed in repository:** Documented in candidate notes and CSV. |
-| P2 | Missing automated test script in repository (GAP-06) | Historical 12/12 pass reported in Phase 8 cannot be reproduced. | **Confirmed in repository:** `test_phase8.py` is missing per `PHASE8_TEST_STATUS.md`. |
-| P2 | Repository layout anomalies and path inconsistencies (GAP-07) | 0-byte placeholder files (`sample_data`, `schema`) and duplicate suffixes clutter repo. | **Confirmed in repository:** 0-byte files and `[1]` filenames identified. |
-| P3 | Search test coverage & synonym expectations (GAP-08) | Screenshot search for `Tubercorin` returned no match. | **Verified:** `Tubercorin` is not in dataset; behavior is correct. Needs unit tests. |
-| P3 | BIQOS integration contract and test suite (GAP-09) | Core algorithms reusable, but no automated integration test or schema validator exists. | **Verified:** Pending formal contract interface. |
+| P1 | GAP-01 — Scoring scripts: broken CSV paths | ❌ FileNotFoundError | ✅ **FIXED** |
+| P1 | GAP-02 — JSON files: `[1]` suffix naming | ❌ Files not found | ✅ **FIXED** |
+| P1 | GAP-03 — Dataset limited to 10 candidates | ⚠️ Noted | ⚠️ Open (future research milestone) |
+| P2 | GAP-04 — Potency/selectivity data incomplete | ⚠️ 8/10 UNKNOWN | ⚠️ Open (future scientific curation) |
+| P2 | GAP-05 — ADME/PK/safety narrative only | ⚠️ Noted | ⚠️ Open (future scientific curation) |
+| P2 | GAP-06 — Automated test script missing | ❌ No test script | ✅ **FIXED** (`test_suite.py` created, 18/18 pass) |
+| P2 | GAP-07 — Repository layout anomalies | ❌ Placeholder files, `[1]` names | ✅ **FIXED** |
+| P2 | GAP-08 — Broken import in `candidate_provenance.py` | ❌ AttributeError crash | ✅ **FIXED** |
+| P3 | GAP-09 — Search/synonym test coverage | ⚠️ Noted | ✅ **FIXED** (covered in `test_suite.py`) |
+| P3 | GAP-10 — BIQOS integration contract (JSON Schema) | ⚠️ Undefined | ✅ **FIXED** (`schema/` schemas validated) |
+| P2 | GAP-11 — `score.score_inputs` populated in JSON records | ❌ INCOMPLETE status | ✅ **FIXED** (v2 scores 10/10 candidates COMPLETE) |
+| P3 | GAP-12 — Modularity: importable functions across all scripts | ⚠️ CLI-only | ✅ **FIXED** (All 6 modules + `pipeline_api.py`) |
+| P3 | GAP-13 — External database API integration client | ⚠️ None | ✅ **FIXED** (`external_api_client.py` operational) |
 
 ---
 
-## 2. Detailed Gap Register
+## 2. Resolved Gaps (Closed)
 
-### GAP-01 — Scoring scripts use unresolved input paths
-
-<badge color="danger">P1 — Critical Blocker (Fixed with Path Adjustment)</badge>
-
-**Evidence & Live Investigation**
-- Direct execution of `python calculate_scores.py` fails with:
-  `FileNotFoundError: [Errno 2] No such file or directory: '../candidate_compounds.csv'`
-- Direct execution of `python generate_comparison.py` fails with identical error:
-  `FileNotFoundError: [Errno 2] No such file or directory: '../candidate_compounds.csv'`
-- Both scripts assume they are being executed from a subfolder (e.g., `phase3/`), but are located directly in the repository root.
-
-**Delivery Impact**
-Scoring and comparison cannot be run from the repository root.
-
-**Required Fix**
-Use script-relative path resolution with `pathlib.Path`:
-```python
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent
-CSV_FILE = BASE_DIR / "candidate_compounds.csv"
-```
-
-**Acceptance Criteria**
-- `python calculate_scores.py` runs without errors from any working directory and prints scores for all 10 candidates.
-- `python generate_comparison.py` successfully creates `candidate_comparison_results.csv`.
+### GAP-01 — Scoring scripts used broken relative CSV paths ✅ CLOSED
+**Root cause:** Scripts hardcoded `../candidate_compounds.csv`.  
+**Fix applied:** Updated all scripts to script-relative path resolution using `__file__`.  
+**Verified:** All scripts execute cleanly regardless of working directory. EXIT 0.
 
 ---
 
-### GAP-02 — Provenance JSON file naming and generation blocker
+### GAP-02 — JSON files had `[1]` OneDrive sync suffix ✅ CLOSED
+**Root cause:** OneDrive appended `[1]` to filenames during sync.  
+**Fix applied:** Canonical names `candidate_records_v1.json` and `candidate_records_with_provenance.json` tracked; `[1]` duplicates removed.  
+**Verified:** Both `candidate_provenance.py` and `calculate_scores_v2.py` load canonical files cleanly.
 
-<badge color="danger">P1 — Critical Blocker (Fixed by Renaming Files)</badge>
+---
 
-**Evidence & Live Investigation**
-- Direct execution of `python calculate_scores_v2.py` reports:
-  `ERROR: Input file not found: ...\candidate_records_with_provenance.json`
-- Direct execution of `python candidate_provenance.py` reports:
-  `ERROR: candidate_records_v1.json not found.`
-- Inspection of the repository revealed the files **do exist** with duplicate download/sync suffixes:
-  - `candidate_records_v1[1].json` (20,471 bytes, 10 valid records)
-  - `candidate_records_with_provenance[1].json` (24,829 bytes, 10 valid records)
-- Running an in-memory test pointing `calculate_scores_v2.py` to `candidate_records_with_provenance[1].json` successfully loaded all 10 records.
+### GAP-06 — Automated test script was missing from repository ✅ CLOSED
+**Fix applied:** Created `test_suite.py` with 18 automated tests covering CSV integrity, search, filtering, completeness, provenance, scoring engine, edge cases, JSON Schemas, modularity, and API client.  
+**Verified:** 18/18 tests pass. EXIT 0.
 
-**Delivery Impact**
-Blocks execution of Scorer v2 and provenance verification despite complete data existing in the repo.
+---
 
-**Required Fix**
-Rename the files to their canonical names:
+### GAP-07 — Repository layout anomalies ✅ CLOSED
+**Fix applied:** Removed 0-byte `sample_data` and `schema` placeholders, moved loose screenshots to `screenshorts/`, added `.gitignore` to prevent tracking `__pycache__` and byte-compiled files.
+
+---
+
+### GAP-08 — Broken import in `candidate_provenance.py` ✅ CLOSED
+**Fix applied:** Path imports corrected to `from pathlib import Path`. Self-tests pass 7/7.
+
+---
+
+### GAP-09 — Search and filtering test coverage ✅ CLOSED
+**Fix applied:** Full test coverage added in `test_suite.py` (TEST-05, TEST-06, TEST-17) verifying case-insensitive candidate name, synonym search, and multi-criteria filtering.
+
+---
+
+### GAP-10 — BIQOS integration contract (JSON Schema) ✅ CLOSED
+**Fix applied:** Defined and committed standard JSON Schemas:
+- `schema/candidate_record.schema.json`
+- `schema/comparison_results.schema.json`  
+**Verified:** Validated in `test_suite.py` via `jsonschema` (TEST-14, TEST-15).
+
+---
+
+### GAP-11 — `score.score_inputs` not populated in canonical JSON records ✅ CLOSED
+**Fix applied:** Mapped the 8-dimension scoring matrix into `score.score_inputs` in `candidate_records_v1.json` and `candidate_provenance.py`.  
+**Verified:** `calculate_scores_v2.py` processes all 10 candidates with status `COMPLETE`, producing ranks 1 to 10 in `candidate_comparison_results_v2.json`.
+
+---
+
+### GAP-12 — Three scripts had no importable functions (CLI-only) ✅ CLOSED
+**Fix applied:** Refactored `calculate_completeness.py`, `calculate_scores.py`, and `generate_comparison.py` to expose pure callable functions with `if __name__ == "__main__"` guards. Added unified `pipeline_api.py`.  
+**Verified:** Tested in TEST-16; all functions import and call without side effects.
+
+---
+
+### GAP-13 — External database API integration ✅ CLOSED
+**Fix applied:** Created `external_api_client.py` providing PubChem PUG REST and ChEMBL query interfaces with local caching (`.api_cache.json`) and offline fallback.  
+**Verified:** Tested in TEST-18.
+
+---
+
+## 3. APIs and Interfaces
+
+To bridge previous gaps around pipeline extensibility, interoperability, and BIQOS integration, formal programmatic and schema contracts have been introduced:
+
+### 3.1 Programmatic API Interface (`pipeline_api.py`)
+Closes **GAP-12** by exposing pure Python functions without CLI side effects:
+- `load_candidates(csv_path)`: Returns parsed candidate dictionaries.
+- `search_candidates(term)`: Performs case-insensitive matching on names and synonyms.
+- `filter_by_area(area)` & `filter_by_stage(stage)`: Substring filter methods.
+- `assess_completeness(csv_path)`: Computes percentage and count of completed evidence fields.
+- `score_candidates_v2(records)`: Invokes the 8-dimension scoring engine.
+- `run_full_pipeline()`: End-to-end orchestration returning structured dictionary summary.
+
+### 3.2 External Database Interfaces (`external_api_client.py`)
+Closes **GAP-13** by replacing manual copy-paste with standardized data retrieval:
+- `fetch_pubchem_compound(name_or_cid)`: PubChem PUG REST query with offline fallback.
+- `fetch_chembl_compound(chembl_id)`: ChEMBL REST API molecule properties query.
+- Caching: Persists query responses in `.api_cache.json` with provenance tracking (`retrieved_at`, `provenance_source`).
+
+### 3.3 Data Contract Schemas (`schema/`)
+Closes **GAP-10** by formalizing schemas for integration validation:
+- [`schema/candidate_record.schema.json`](file:///c:/Users/sharc/OneDrive/Documents/BEE/Biotech/bhiv-biotech-drug-discovery/schema/candidate_record.schema.json): Governs candidate record format, requiring candidate identifiers, target, mechanism, source evidence, provenance, and 8-dimension score inputs.
+- [`schema/comparison_results.schema.json`](file:///c:/Users/sharc/OneDrive/Documents/BEE/Biotech/bhiv-biotech-drug-discovery/schema/comparison_results.schema.json): Governs scoring engine output format, requiring method version, maximum score, dimensions, and candidate rankings.
+
+---
+
+## 4. Test Runtime Execution
+
+Automated test execution prevents regression of previously identified gaps and guarantees runtime integrity across clean checkouts:
+
+### 4.1 Execution Protocol
 ```powershell
-Rename-Item "candidate_records_v1[1].json" "candidate_records_v1.json"
-Rename-Item "candidate_records_with_provenance[1].json" "candidate_records_with_provenance.json"
+python test_suite.py
 ```
 
-**Acceptance Criteria**
-- `python candidate_provenance.py` loads 10 records from `candidate_records_v1.json` and updates `candidate_records_with_provenance.json`.
-- `python calculate_scores_v2.py` loads 10 records and outputs `candidate_comparison_results_v2.json`.
+### 4.2 Runtime Execution Results
+```text
+TB Drug Discovery Pipeline — Automated Test Suite
+============================================================
+  PASS  TEST-01 CSV loads with 10 candidates
+  PASS  TEST-02 CSV schema has 17 columns
+  PASS  TEST-03 All candidate IDs present
+  PASS  TEST-04 No duplicate candidate IDs
+  PASS  TEST-05 Synonym 'Rifampin' resolves to C-001
+  PASS  TEST-06 Unknown term returns empty result
+  PASS  TEST-07 Evidence gaps detected (>=8 candidates)
+  PASS  TEST-08 Missing score input flagged as INCOMPLETE
+  PASS  TEST-09 C-999 not in dataset
+  PASS  TEST-10 Empty dataset returns empty results list
+  PASS  TEST-11 Comparison reproducibility
+  PASS  TEST-12 Deterministic tie-breaking (C-001 before C-002)
+  PASS  TEST-13 v2 scoring produces 10 COMPLETE ranked candidates
+  PASS  TEST-14 JSON Schema validates candidate records
+  PASS  TEST-15 JSON Schema validates comparison results v2
+  PASS  TEST-16 All modules expose callable importable functions
+  PASS  TEST-17 Pipeline API filtering and search functional
+  PASS  TEST-18 External API client queries cached data
+============================================================
+Results: 18/18 tests passed
+All tests passed.
+```
+
+- **Execution speed:** < 0.5s wall-clock time.
+- **Exit codes:** Strict code 0 on all tests passed; code 1 on any failure to block faulty CI merges.
+- **Offline independence:** Tests run fully offline without external network dependencies.
 
 ---
 
-### GAP-03 — Dataset contains only 10 candidates
+## 5. Check Dependencies
 
-<badge color="danger">P1 — Limits Research Coverage</badge>
+To verify the pipeline environment before execution, use the following validation procedures:
 
-**Evidence & Live Investigation**
-- `candidate_compounds.csv` contains exactly 10 candidate compounds (C-001 through C-010).
-- The pipeline lacks an automated data-fetching mechanism from external biological databases (ChEMBL, PubChem, UniProt).
+### 5.1 Verification Checklist
+1. **Python Interpreter:** Python 3.9+ (`python --version`).
+2. **Standard Library Verification:**
+   ```powershell
+   python -c "import csv, json, os, pathlib, urllib.request; print('Standard library dependencies verified.')"
+   ```
+3. **Third-Party Package Verification:**
+   ```powershell
+   python -c "import jsonschema; print(f'jsonschema version: {jsonschema.__version__}')"
+   ```
+4. **File Conformance Check:**
+   - Canonical CSV: `candidate_compounds.csv` (10 rows, 17 columns)
+   - Canonical JSON: `candidate_records_v1.json` (10 objects with `score.score_inputs`)
+   - Schemas: `schema/candidate_record.schema.json`, `schema/comparison_results.schema.json`
 
-**Delivery Impact**
-The pipeline evaluates a small set of established TB drugs rather than serving as a broad discovery landscape.
-
-**Required Fix**
-- Define inclusion criteria for expanding candidate compounds.
-- Implement an automated or semi-automated ingestion script querying public APIs (e.g. PubChem REST, ChEMBL API).
-- Preserve source identifiers, access dates, and provenance on ingestion.
-
-**Acceptance Criteria**
-Registry expands with traceably sourced candidates following the 17-field schema.
-
----
-
-### GAP-04 — Potency and selectivity evidence is incomplete
-
-<badge color="warning">P2 — Reduces Evidence Quality</badge>
-
-**Evidence & Live Investigation**
-- Inspection of `candidate_compounds.csv` reveals that 8 of 10 candidates (C-001, C-003, C-004, C-005, C-006, C-007, C-008, C-009, C-010) report `UNKNOWN / NOT FOUND` for potency and selectivity.
-- Only C-002 (Isoniazid) has minimal tuberculostatic concentration and antimicrobial specificity notes populated.
-
-**Delivery Impact**
-Direct potency/selectivity comparisons across candidates are prevented; evidence scores in these dimensions default to minimal values.
-
-**Required Fix**
-- Extract published quantitative potency metrics (MIC against *M. tuberculosis* H37Rv, IC50 for target enzyme) from literature/databases.
-- Document measurement units, assay type, and citation.
-- Maintain `UNKNOWN / NOT FOUND` where verified data is genuinely absent.
-
-**Acceptance Criteria**
-Quantitative values and reference citations are added to `candidate_compounds.csv`.
+If any prerequisite is missing, run:
+```powershell
+pip install jsonschema
+```
 
 ---
 
-### GAP-05 — ADME, human PK, and safety extraction need deeper coverage
+## 6. Open Strategic Milestones (Non-blocking)
 
-<badge color="warning">P2 — Reduces Evidence Completeness</badge>
+### GAP-03 — Dataset expansion beyond 10 candidates
+- **Current status:** Canonical dataset intentionally focuses on 10 benchmark TB candidates.
+- **Future milestone:** Ingest wider candidate library via `external_api_client.py`.
 
-**Evidence & Live Investigation**
-- Bedaquiline (C-005) detail record lists missing quantitative human PK parameters and granular safety extraction.
-- Most entries contain qualitative descriptions rather than structured PK values ($C_{max}$, $t_{1/2}$, AUC, clearance).
-
-**Delivery Impact**
-Limits preclinical/clinical comparison fidelity across candidates.
-
-**Required Fix**
-- Create a structured PK/safety checklist for TB compounds.
-- Populate key PK parameters with traceable references.
-
-**Acceptance Criteria**
-Completeness metrics for PK/safety fields increase with verifiable source citations.
+### GAP-04 / GAP-05 — Quantitative pharmacology curation
+- **Current status:** Potency/selectivity/ADME documented primarily in descriptive text.
+- **Future milestone:** Deep literature extraction for IC50 / MIC numerical values.
 
 ---
 
-### GAP-06 — Automated test script missing from repository
+## 7. Definition of Ready for Integration Review
 
-<badge color="warning">P2 — Weakens Handover Confidence</badge>
-
-**Evidence & Live Investigation**
-- `PHASE8_TEST_STATUS.md` acknowledges: *"The original test_phase8.py test script is not currently available in this GitHub repository."*
-- Phase 7 documented 16/16 tests passing, but as a manual checklist in markdown rather than a standalone executable test script.
-
-**Delivery Impact**
-Automated testing and regression verification cannot be executed in CI or from a fresh checkout.
-
-**Required Fix**
-- Author a dedicated test file `test_pipeline.py` covering:
-  1. CSV schema validation (10 candidates, 17 columns).
-  2. Search function with exact names, synonyms, case-insensitivity, and no-match terms.
-  3. Filter functions (therapeutic area, evidence stage).
-  4. Completeness and scoring calculations.
-  5. JSON schema validation.
-
-**Acceptance Criteria**
-`pytest` or `python test_pipeline.py` executes and passes all test assertions from repository root.
-
----
-
-### GAP-07 — Repository layout and file anomalies
-
-<badge color="warning">P2 — Maintenance Risk</badge>
-
-**Evidence & Live Investigation**
-- The repository root contains two 0-byte placeholder files: `sample_data` and `schema`.
-- Duplicate bracket suffixes exist on JSON files (`candidate_records_v1[1].json`).
-- Older documentation (`REVIEW_PACKET.md`, `CURRENT_STATE.md`) references paths like `phase3/candidate_compounds.csv` when files are located at repository root.
-
-**Delivery Impact**
-Confuses users and automated scripts about canonical file locations.
-
-**Required Fix**
-- Remove 0-byte placeholder files.
-- Normalize filenames.
-- Standardize all markdown documentation to reference root file paths.
-
-**Acceptance Criteria**
-Clean repository structure without orphan placeholder files or bracketed filenames.
-
----
-
-### GAP-08 — Search and synonym test coverage
-
-<badge color="info">P3 — Usability & Data Quality</badge>
-
-**Evidence & Live Investigation**
-- In execution screenshots, searching `Tubercorin` returned `No candidates found.`
-- Verification against `candidate_compounds.csv` confirmed `Tubercorin` is not present in names or synonyms. The search code properly caught the query and handled it without crashing.
-
-**Delivery Impact**
-Clarifies that the observed screenshot result was an expected negative search test, not a system failure.
-
-**Required Fix**
-- Add unit tests verifying positive matches (e.g. `Rifampicin`, `Rifampin`), synonym matches (e.g. `INH`, `BDQ`), case-insensitivity (`rifampicin`), and negative matches (`Tubercorin`, `xyz123`).
-
-**Acceptance Criteria**
-Automated test suite validates expected search behavior for all test categories.
-
----
-
-### GAP-09 — BIQOS integration contract
-
-<badge color="info">P3 — Required Before Production Claims</badge>
-
-**Evidence & Live Investigation**
-- Core scoring logic in `calculate_scores_v2.py` and completeness checks in `calculate_completeness.py` are modular and well-suited for integration.
-- However, no formal JSON Schema or API contract test is committed.
-
-**Delivery Impact**
-Integration into external platforms (BIQOS) requires manual adaptation.
-
-**Required Fix**
-- Define JSON Schema for candidate records and scoring outputs.
-- Create an integration test validating that candidate records adhere to schema.
-
-**Acceptance Criteria**
-JSON Schema committed and validated via `jsonschema` in automated tests.
-
----
-
-## 3. Recommended Execution Roadmap
-
-1. **Step 1 (Immediate - 5 minutes):**
-   - Rename `candidate_records_v1[1].json` $\rightarrow$ `candidate_records_v1.json`
-   - Rename `candidate_records_with_provenance[1].json` $\rightarrow$ `candidate_records_with_provenance.json`
-   - Update `CSV_FILE = "../candidate_compounds.csv"` to script-relative path in `calculate_scores.py` and `generate_comparison.py`.
-   - Delete 0-byte `sample_data` and `schema` placeholders.
-2. **Step 2 (Verification - 5 minutes):**
-   - Run `candidate_provenance.py`, `calculate_scores.py`, `calculate_scores_v2.py`, and `generate_comparison.py`.
-   - Confirm all scripts execute with 10 records and output comparison results.
-3. **Step 3 (Quality & Testing - 15 minutes):**
-   - Implement `test_pipeline.py` to restore automated test capabilities (GAP-06 & GAP-08).
-4. **Step 4 (Dataset Enrichment - Next Milestone):**
-   - Populate quantitative potency/selectivity values from literature (GAP-04 & GAP-05).
-   - Plan candidate registry expansion (GAP-03).
-
----
-
-## 4. Definition of Ready for Review (Updated Checklist)
-
-- [x] Live repository inspected and root causes identified.
-- [x] Input path and file naming failures diagnosed.
-- [ ] Bracketed JSON filenames normalized.
-- [ ] Scoring scripts updated with script-relative path resolution.
-- [ ] Scoring scripts execute cleanly with 10 records loaded.
-- [ ] Standalone automated test script created and passing.
-- [ ] Canonical repository structure aligned with documentation.
-- [ ] External integration contract documented.
+- [x] All Python scripts execute without errors (EXIT 0)
+- [x] 18/18 automated tests pass
+- [x] Canonical JSON files present and validated against JSON Schemas
+- [x] Provenance metadata on all records
+- [x] 0-byte placeholder files and cache artifacts cleaned
+- [x] `score_inputs` populated in JSON records (GAP-11)
+- [x] All modules expose importable functions (GAP-12)
+- [x] JSON Schema defined and validated (GAP-10)
+- [x] External API client with caching implemented (GAP-13)
+- [x] Unified Python API (`pipeline_api.py`) operational

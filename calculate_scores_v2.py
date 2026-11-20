@@ -111,12 +111,11 @@ def create_comparison_results(records):
             "UNKNOWN"
         )
 
-        compound = record.get("compound", {})
-
-        compound_name = compound.get(
-            "name",
-            "UNKNOWN"
-        )
+        compound = record.get("compound")
+        if isinstance(compound, dict):
+            compound_name = compound.get("name") or record.get("compound_name", "UNKNOWN")
+        else:
+            compound_name = record.get("compound_name", "UNKNOWN")
 
         calculated = calculate_score(record)
 

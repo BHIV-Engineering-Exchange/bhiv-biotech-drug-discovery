@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TBCandidateRecord",
+  "description": "Schema for canonical TB drug discovery candidate records with provenance and score inputs",
+  "type": "object",
+  "required": [
+    "candidate_id",
+    "compound_name",
+    "target",
+    "mechanism_of_action",
+    "evidence_stage",
+    "source_evidence",
+    "provenance"
+  ],
+  "properties": {
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^[A-Z]-[0-9]{3}$"
+    },
+    "compound_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "synonyms": {
+      "type": "string"
+    },
+    "source_database": {
+      "type": "string"
+    },
+    "molecular_identifier": {
+      "type": "string"
+    },
+    "target": {
+      "type": "string"
+    },
+    "mechanism_of_action": {
+      "type": "string"
+    },
+    "therapeutic_area": {
+      "type": "string"
+    },
+    "evidence_stage": {
+      "type": "string"
+    },
+    "potency": {
+      "type": "string"
+    },
+    "selectivity": {
+      "type": "string"
+    },
+    "adme": {
+      "type": "string"
+    },
+    "safety_toxicity": {
+      "type": "string"
+    },
+    "supporting_publications": {
+      "type": "string"
+    },
+    "known_limitations": {
+      "type": "string"
+    },
+    "evidence_confidence": {
+      "type": "string",
+      "enum": ["High", "Moderate", "Medium", "Low", "Unknown"]
+    },
+    "missing_information": {
+      "type": "string"
+    },
+    "source_evidence": {
+      "type": "object",
+      "required": ["sources", "evidence_summary", "limitations"],
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "evidence_summary": {
+          "type": "object",
+          "required": ["supporting_publications", "evidence_confidence"],
+          "properties": {
+            "supporting_publications": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "evidence_confidence": {
+              "type": "string"
+            }
+          }
+        },
+        "limitations": {
+          "type": "string"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["record_source", "schema_version", "transformation", "derived_fields"],
+      "properties": {
+        "record_source": { "type": "string" },
+        "schema_version": { "type": "string" },
+        "transformation": { "type": "string" },
+        "derived_fields": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "score": {
+      "type": "object",
+      "properties": {
+        "score_inputs": {
+          "type": "object",
+          "required": [
+            "target_relevance",
+            "mechanism_evidence",
+            "potency_evidence",
+            "selectivity_evidence",
+            "adme_evidence",
+            "safety_evidence",
+            "research_development_evidence",
+            "evidence_completeness"
+          ],
+          "properties": {
+            "target_relevance": { "type": "integer", "minimum": 0, "maximum": 5 },
+            "mechanism_evidence": { "type": "integer", "minimum": 0, "maximum": 5 },
+            "potency_evidence": { "type": "integer", "minimum": 0, "maximum": 5 },
+            "selectivity_evidence": { "type": "integer", "minimum": 0, "maximum": 5 },
+            "adme_evidence": { "type": "integer", "minimum": 0, "maximum": 5 },
+            "safety_evidence": { "type": "integer", "minimum": 0, "maximum": 5 },
+            "research_development_evidence": { "type": "integer", "minimum": 0, "maximum": 5 },
+            "evidence_completeness": { "type": "integer", "minimum": 0, "maximum": 5 }
+          }
+        }
+      }
+    }
+  }
+}

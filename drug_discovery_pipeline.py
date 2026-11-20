@@ -1,27 +1,31 @@
 import csv
+import os
 
-CSV_FILE = "candidate_compounds.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_FILE = os.path.join(BASE_DIR, "candidate_compounds.csv")
 
 
-def load_candidates():
+def load_candidates(csv_file=None):
     """Load candidate compounds from CSV."""
+    if csv_file is None:
+        csv_file = CSV_FILE
+
     try:
-        with open(CSV_FILE, newline="", encoding="utf-8-sig") as file:
+        with open(csv_file, newline="", encoding="utf-8-sig") as file:
             return list(csv.DictReader(file))
     except FileNotFoundError:
-        print(f"\nERROR: {CSV_FILE} not found.")
+        print(f"\nERROR: {csv_file} not found.")
         return []
 
 
 def search_by_name(candidates, search_term):
     """Search candidates by compound name or synonym."""
     search_term = search_term.lower().strip()
-
     results = []
 
     for candidate in candidates:
-        name = candidate["compound_name"].lower()
-        synonyms = candidate["synonyms"].lower()
+        name = candidate.get("compound_name", "").lower()
+        synonyms = candidate.get("synonyms", "").lower()
 
         if search_term in name or search_term in synonyms:
             results.append(candidate)
@@ -32,22 +36,20 @@ def search_by_name(candidates, search_term):
 def filter_by_therapeutic_area(candidates, area):
     """Filter candidates by therapeutic area."""
     area = area.lower().strip()
-
     return [
         candidate
         for candidate in candidates
-        if area in candidate["therapeutic_area"].lower()
+        if area in candidate.get("therapeutic_area", "").lower()
     ]
 
 
 def filter_by_evidence_stage(candidates, stage):
     """Filter candidates by evidence stage."""
     stage = stage.lower().strip()
-
     return [
         candidate
         for candidate in candidates
-        if stage in candidate["evidence_stage"].lower()
+        if stage in candidate.get("evidence_stage", "").lower()
     ]
 
 
@@ -71,24 +73,23 @@ def display_candidate_details(candidate):
     """Display detailed research information for one candidate."""
     print("\nCandidate Details")
     print("=" * 60)
-
-    print(f"Candidate ID: {candidate['candidate_id']}")
-    print(f"Compound Name: {candidate['compound_name']}")
-    print(f"Synonyms: {candidate['synonyms']}")
-    print(f"Source Database: {candidate['source_database']}")
-    print(f"Molecular Identifier: {candidate['molecular_identifier']}")
-    print(f"Target: {candidate['target']}")
-    print(f"Mechanism of Action: {candidate['mechanism_of_action']}")
-    print(f"Therapeutic Area: {candidate['therapeutic_area']}")
-    print(f"Evidence Stage: {candidate['evidence_stage']}")
-    print(f"Potency: {candidate['potency']}")
-    print(f"Selectivity: {candidate['selectivity']}")
-    print(f"ADME: {candidate['adme']}")
-    print(f"Safety/Toxicity: {candidate['safety_toxicity']}")
-    print(f"Supporting Publications: {candidate['supporting_publications']}")
-    print(f"Known Limitations: {candidate['known_limitations']}")
-    print(f"Evidence Confidence: {candidate['evidence_confidence']}")
-    print(f"Missing Information: {candidate['missing_information']}")
+    print(f"Candidate ID: {candidate.get('candidate_id', '')}")
+    print(f"Compound Name: {candidate.get('compound_name', '')}")
+    print(f"Synonyms: {candidate.get('synonyms', '')}")
+    print(f"Source Database: {candidate.get('source_database', '')}")
+    print(f"Molecular Identifier: {candidate.get('molecular_identifier', '')}")
+    print(f"Target: {candidate.get('target', '')}")
+    print(f"Mechanism of Action: {candidate.get('mechanism_of_action', '')}")
+    print(f"Therapeutic Area: {candidate.get('therapeutic_area', '')}")
+    print(f"Evidence Stage: {candidate.get('evidence_stage', '')}")
+    print(f"Potency: {candidate.get('potency', '')}")
+    print(f"Selectivity: {candidate.get('selectivity', '')}")
+    print(f"ADME: {candidate.get('adme', '')}")
+    print(f"Safety/Toxicity: {candidate.get('safety_toxicity', '')}")
+    print(f"Supporting Publications: {candidate.get('supporting_publications', '')}")
+    print(f"Known Limitations: {candidate.get('known_limitations', '')}")
+    print(f"Evidence Confidence: {candidate.get('evidence_confidence', '')}")
+    print(f"Missing Information: {candidate.get('missing_information', '')}")
 
 
 def main():
@@ -111,20 +112,33 @@ def main():
         print("6. View all candidate details")
         print("7. Exit")
 
-        choice = input("\nEnter your choice: ").strip()
+        try:
+            choice = input("\nEnter your choice: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nExiting pipeline.")
+            break
 
         if choice == "1":
-            term = input("Enter compound name or synonym: ")
+            try:
+                term = input("Enter compound name or synonym: ")
+            except (EOFError, KeyboardInterrupt):
+                break
             results = search_by_name(candidates, term)
             display_candidates(results)
 
         elif choice == "2":
-            area = input("Enter therapeutic area: ")
+            try:
+                area = input("Enter therapeutic area: ")
+            except (EOFError, KeyboardInterrupt):
+                break
             results = filter_by_therapeutic_area(candidates, area)
             display_candidates(results)
 
         elif choice == "3":
-            stage = input("Enter evidence stage: ")
+            try:
+                stage = input("Enter evidence stage: ")
+            except (EOFError, KeyboardInterrupt):
+                break
             results = filter_by_evidence_stage(candidates, stage)
             display_candidates(results)
 
@@ -132,12 +146,14 @@ def main():
             display_candidates(candidates)
 
         elif choice == "5":
-            candidate_id = input(
-                "Enter candidate ID (example: C-001): "
-            ).strip().upper()
+            try:
+                candidate_id = input(
+                    "Enter candidate ID (example: C-001): "
+                ).strip().upper()
+            except (EOFError, KeyboardInterrupt):
+                break
 
             found = False
-
             for candidate in candidates:
                 if candidate["candidate_id"].strip().upper() == candidate_id:
                     display_candidate_details(candidate)
@@ -150,7 +166,6 @@ def main():
         elif choice == "6":
             print("\nAll Candidate Details")
             print("=" * 60)
-
             for candidate in candidates:
                 display_candidate_details(candidate)
 

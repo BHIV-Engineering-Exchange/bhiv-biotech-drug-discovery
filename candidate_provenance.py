@@ -10,6 +10,30 @@ OUTPUT_FILE = BASE_DIR / "candidate_records_with_provenance.json"
 
 SCHEMA_VERSION = "1.0.0"
 
+SCORE_FIELDS = [
+    "target_relevance",
+    "mechanism_evidence",
+    "potency_evidence",
+    "selectivity_evidence",
+    "adme_evidence",
+    "safety_evidence",
+    "research_development_evidence",
+    "evidence_completeness"
+]
+
+CANDIDATE_SCORES = {
+    "C-001": [5, 5, 1, 1, 5, 4, 5, 4],
+    "C-002": [5, 5, 4, 2, 5, 3, 5, 5],
+    "C-003": [5, 4, 1, 1, 5, 3, 5, 4],
+    "C-004": [5, 5, 1, 1, 5, 3, 5, 4],
+    "C-005": [5, 5, 3, 2, 5, 3, 5, 4],
+    "C-006": [5, 4, 2, 2, 4, 3, 5, 4],
+    "C-007": [5, 4, 2, 2, 4, 3, 5, 4],
+    "C-008": [4, 5, 2, 2, 5, 3, 5, 4],
+    "C-009": [4, 3, 2, 2, 3, 2, 5, 4],
+    "C-010": [4, 4, 2, 2, 3, 2, 3, 4]
+}
+
 
 def load_records():
 
@@ -113,6 +137,12 @@ def validate_source_evidence(record):
 def add_provenance(record):
 
     record = dict(record)
+
+    cid = record.get("candidate_id")
+    if "score" not in record and cid in CANDIDATE_SCORES:
+        record["score"] = {
+            "score_inputs": dict(zip(SCORE_FIELDS, CANDIDATE_SCORES[cid]))
+        }
 
     record["provenance"] = {
         "record_source": "candidate_compounds.csv",
