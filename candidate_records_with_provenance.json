@@ -32,18 +32,6 @@
       },
       "limitations": "Resistance can arise through mutations affecting the rifampicin target, particularly the RpoB/RNA-polymerase beta subunit."
     },
-    "score": {
-      "score_inputs": {
-        "target_relevance": 5,
-        "mechanism_evidence": 5,
-        "potency_evidence": 1,
-        "selectivity_evidence": 1,
-        "adme_evidence": 5,
-        "safety_evidence": 4,
-        "research_development_evidence": 5,
-        "evidence_completeness": 4
-      }
-    },
     "provenance": {
       "record_source": "candidate_compounds.csv",
       "schema_version": "1.0.0",
@@ -86,18 +74,6 @@
         "evidence_confidence": "High"
       },
       "limitations": "Resistance can arise through mutations affecting the drug-activation pathway or target; variability in NAT2 acetylation also contributes to differences in disposition."
-    },
-    "score": {
-      "score_inputs": {
-        "target_relevance": 5,
-        "mechanism_evidence": 5,
-        "potency_evidence": 4,
-        "selectivity_evidence": 2,
-        "adme_evidence": 5,
-        "safety_evidence": 3,
-        "research_development_evidence": 5,
-        "evidence_completeness": 5
-      }
     },
     "provenance": {
       "record_source": "candidate_compounds.csv",
@@ -145,18 +121,6 @@
       },
       "limitations": "The mechanism of action is complex and has historically been incompletely resolved. Resistance is strongly associated with mutations in pncA, while mutations affecting other pathways including rpsA and panD have also been reported."
     },
-    "score": {
-      "score_inputs": {
-        "target_relevance": 5,
-        "mechanism_evidence": 4,
-        "potency_evidence": 1,
-        "selectivity_evidence": 1,
-        "adme_evidence": 5,
-        "safety_evidence": 3,
-        "research_development_evidence": 5,
-        "evidence_completeness": 4
-      }
-    },
     "provenance": {
       "record_source": "candidate_compounds.csv",
       "schema_version": "1.0.0",
@@ -197,18 +161,6 @@
         "evidence_confidence": "High"
       },
       "limitations": "Optic toxicity limits the safety profile; resistance can occur through changes involving embCAB and related pathways."
-    },
-    "score": {
-      "score_inputs": {
-        "target_relevance": 5,
-        "mechanism_evidence": 5,
-        "potency_evidence": 1,
-        "selectivity_evidence": 1,
-        "adme_evidence": 5,
-        "safety_evidence": 3,
-        "research_development_evidence": 5,
-        "evidence_completeness": 4
-      }
     },
     "provenance": {
       "record_source": "candidate_compounds.csv",
@@ -253,18 +205,6 @@
       },
       "limitations": "Long terminal half-life and drug-interaction potential; resistance can arise through changes affecting ATP synthase and other resistance-associated mechanisms."
     },
-    "score": {
-      "score_inputs": {
-        "target_relevance": 5,
-        "mechanism_evidence": 5,
-        "potency_evidence": 3,
-        "selectivity_evidence": 2,
-        "adme_evidence": 5,
-        "safety_evidence": 3,
-        "research_development_evidence": 5,
-        "evidence_completeness": 4
-      }
-    },
     "provenance": {
       "record_source": "candidate_compounds.csv",
       "schema_version": "1.0.0",
@@ -307,18 +247,6 @@
         "evidence_confidence": "High"
       },
       "limitations": "Resistance may involve alterations in the nitroreductase/F420 activation pathway; QT prolongation is an important limitation."
-    },
-    "score": {
-      "score_inputs": {
-        "target_relevance": 5,
-        "mechanism_evidence": 4,
-        "potency_evidence": 2,
-        "selectivity_evidence": 2,
-        "adme_evidence": 4,
-        "safety_evidence": 3,
-        "research_development_evidence": 5,
-        "evidence_completeness": 4
-      }
     },
     "provenance": {
       "record_source": "candidate_compounds.csv",
@@ -363,18 +291,6 @@
       },
       "limitations": "Resistance can arise through alterations in nitroimidazole activation pathways and other resistance-associated mechanisms; evidence is strongly regimen-dependent."
     },
-    "score": {
-      "score_inputs": {
-        "target_relevance": 5,
-        "mechanism_evidence": 4,
-        "potency_evidence": 2,
-        "selectivity_evidence": 2,
-        "adme_evidence": 4,
-        "safety_evidence": 3,
-        "research_development_evidence": 5,
-        "evidence_completeness": 4
-      }
-    },
     "provenance": {
       "record_source": "candidate_compounds.csv",
       "schema_version": "1.0.0",
@@ -417,18 +333,6 @@
         "evidence_confidence": "High"
       },
       "limitations": "Duration-related toxicity can limit use; resistance may arise through mutations affecting the 23S rRNA target or ribosomal proteins."
-    },
-    "score": {
-      "score_inputs": {
-        "target_relevance": 4,
-        "mechanism_evidence": 5,
-        "potency_evidence": 2,
-        "selectivity_evidence": 2,
-        "adme_evidence": 5,
-        "safety_evidence": 3,
-        "research_development_evidence": 5,
-        "evidence_completeness": 4
-      }
     },
     "provenance": {
       "record_source": "candidate_compounds.csv",
@@ -473,18 +377,6 @@
       },
       "limitations": "Very long persistence in tissues and skin discoloration; mechanism and resistance biology are more complex than a single-target model."
     },
-    "score": {
-      "score_inputs": {
-        "target_relevance": 4,
-        "mechanism_evidence": 3,
-        "potency_evidence": 2,
-        "selectivity_evidence": 2,
-        "adme_evidence": 3,
-        "safety_evidence": 2,
-        "research_development_evidence": 5,
-        "evidence_completeness": 4
-      }
-    },
     "provenance": {
       "record_source": "candidate_compounds.csv",
       "schema_version": "1.0.0",
@@ -526,18 +418,6 @@
         "evidence_confidence": "Moderate"
       },
       "limitations": "Investigational status means the clinical evidence base is less mature; quantitative efficacy and long-term safety evidence remain incomplete."
-    },
-    "score": {
-      "score_inputs": {
-        "target_relevance": 4,
-        "mechanism_evidence": 4,
-        "potency_evidence": 2,
-        "selectivity_evidence": 2,
-        "adme_evidence": 3,
-        "safety_evidence": 2,
-        "research_development_evidence": 3,
-        "evidence_completeness": 4
-      }
     },
     "provenance": {
       "record_source": "candidate_compounds.csv",
