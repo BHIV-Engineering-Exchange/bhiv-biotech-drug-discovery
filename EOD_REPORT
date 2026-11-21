@@ -1,0 +1,108 @@
+# BHIV BiotechSystem — End-of-Day (EOD) Report
+
+**Report date:** 21 November 2026  
+**Task assignment date:** 20 November 2026  
+**Owner:** Shamit Waghmare  
+**Workstream:** Drug Discovery & Compound Research  
+**Project:** TB Drug-Discovery Candidate Intelligence  
+**Task ID:** BIOTECH-T3-SHAMIT-TB-DRUG-DISCOVERY
+
+## 1. Objective
+
+Develop and verify a reproducible local TB drug-discovery candidate research pipeline, document candidate evidence and provenance, and identify the exact integration state and remaining blockers.
+
+## 2. Work Completed / Reported
+
+- Structured a dataset of 10 TB drug candidates using 17 candidate fields.
+- Prepared candidate records with provenance.
+- Implemented candidate identity resolution using candidate IDs, names, synonyms, and molecular identifiers.
+- Implemented deterministic candidate comparison and scoring.
+- Generated candidate comparison results and validation documentation.
+- Completed candidate schema negative tests and identity resolution unit tests.
+
+## 3. Test Evidence
+
+### Candidate schema negative tests
+- Total: 5
+- Passed: 5
+- Failed: 0
+
+### Identity resolution tests
+- Total: 8
+- Passed: 8
+- Failed: 0
+
+**Combined reported test result: 13 passed, 0 failed.**
+
+Command reported for repository unit tests:
+
+```powershell
+python -m unittest discover -v
+```
+
+## 4. Candidate Comparison
+
+The current comparison output contains 10 candidates and uses a deterministic score out of 40. The reported top-ranked record is:
+
+- Candidate: C-002 — Isoniazid
+- Score: 34/40
+
+The score is a research decision-support output only. It is not a validated clinical ranking, efficacy conclusion, or treatment recommendation.
+
+## 5. Data, Sources, and Provenance
+
+Candidate records include source/provenance information and distinguish derived comparison/scoring fields from source records.
+
+**Data status:** Confirm and explicitly label each record as real-source, synthetic/test, or mixed before final submission. Do not present test fixtures as real evidence.
+
+Evidence gaps previously identified include quantitative potency and selectivity, assay-specific evidence, human pharmacokinetics, detailed ADME, and safety/toxicity evidence. These gaps require further source-linked research and validation.
+
+## 6. Repository and Runtime
+
+- Repository referenced for the project: https://github.com/BHIV-Engineering-Exchange/bhiv-biotech-drug-discovery
+- Runtime: local Python environment
+- Current evidenced state: working local research pipeline
+- Branch: pending confirmation from GitHub
+- Commit/version: pending confirmation from GitHub
+- Clean-environment reproducibility: pending final clean-run capture
+
+## 7. Integration and Operational Status
+
+| Capability | Status |
+|---|---|
+| Local candidate pipeline | Implemented; reported tests passed |
+| Candidate schema validation | Tested: 5/5 passed |
+| Identity resolution | Tested: 8/8 passed |
+| Candidate provenance records | Prepared |
+| Shared evidence/API contract integration | Not demonstrated; mapping or exact blocker pending |
+| Connected Drug Safety → Biomedical Evidence → QC workflow | Not demonstrated |
+| BIQOS update | Pending |
+| Production deployment | Not demonstrated |
+| Independent scientific validation | Not completed |
+
+## 8. Blockers and Risks
+
+1. Capture a final clean-environment pipeline run with exact command and complete output.
+2. Confirm and label the data as real-source, synthetic/test, or mixed.
+3. Record the actual GitHub branch and commit after final upload.
+4. Complete the evidence-contract/API mapping or document the precise integration blocker.
+5. Update BIQOS using evidence-backed operational status.
+6. Upload the EOD report and supporting evidence files.
+
+## 9. Next Actions
+
+1. Run the pipeline from a clean environment and save the terminal output.
+2. Confirm source/data classification and link the evidence.
+3. Finalize API/contract mapping or blocker statement.
+4. Upload this report and supporting artifacts to the repository.
+5. Update BIQOS with the verified state and evidence links.
+
+## 10. Final Status
+
+The local TB drug-discovery candidate research pipeline has structured candidate records, provenance support, candidate comparison outputs, and reported passing schema and identity-resolution tests (13/13 combined).
+
+The work remains a **local research pipeline**. Clean-environment reproducibility, shared integration, BIQOS closure, and final publication remain pending. No production, clinical, or integrated-system capability is claimed.
+
+---
+
+**Prepared as an EOD report draft.** This file's creation does not indicate that it has been uploaded to GitHub or submitted to BIQOS.
